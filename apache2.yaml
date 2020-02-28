@@ -1,0 +1,29 @@
+---
+- name: Install Apache
+  vars:
+  - repo:
+      Debian:
+      - apt
+      RedHat:
+      - epel-release
+  - packages:
+      Debian:
+      - apache2
+      RedHat:
+      - httpd 
+  - services:
+      Debian: apache2
+      RedHat: httpd
+  tasks:
+  - name: Install Repo
+    package:
+     name: "{{ repo[ansible_os_family] }}"
+  - name: Install Web Servers
+    package:
+     name: "{{ packages[ansible_os_family] }}"   
+     state: latest
+  - name: Start Web Servers
+    service:
+     name: "{{ services[ansible_os_family] }}"
+     state: restarted
+     enabled: yes
